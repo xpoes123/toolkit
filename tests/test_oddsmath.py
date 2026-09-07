@@ -38,6 +38,15 @@ def test_decimal_conversions():
         om.decimal_to_american(1.0)
 
 
+def test_profit():
+    assert abs(om.profit(-110) - 100 / 110) < 1e-12
+    assert om.profit(150) == 1.5
+    assert om.profit(100) == 1.0
+    # profit(a) == american_to_decimal(a) - 1
+    for a in (-250, -110, 120, 300):
+        assert abs(om.profit(a) - (om.american_to_decimal(a) - 1)) < 1e-12
+
+
 def test_devig_sums_to_one_and_orders():
     h, a = om.devig_two_way(-150, 130)
     assert abs(h + a - 1.0) < 1e-12 and h > a          # favorite has higher fair prob

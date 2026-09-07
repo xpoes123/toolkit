@@ -39,6 +39,13 @@ def decimal_to_american(decimal: float) -> int:
     return round((decimal - 1) * 100) if decimal >= 2.0 else round(-100 / (decimal - 1))
 
 
+def profit(american: float) -> float:
+    """Profit per 1 unit staked on a win, at American odds (the 'to-win' amount):
+    -110 -> 0.909, +150 -> 1.5. Equals american_to_decimal(a) - 1. Used by props
+    grading and backtests to net the vig into ROI."""
+    return 100 / abs(american) if american < 0 else american / 100
+
+
 def devig_two_way(ml_home: int, ml_away: int) -> tuple[float, float]:
     """Normalize a two-sided American moneyline into fair (home, away) win
     probabilities summing to 1 (removes the bookmaker's vig)."""

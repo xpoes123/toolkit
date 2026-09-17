@@ -63,6 +63,16 @@ Shared CSS custom properties, extracted from `finance/index.html` and
 `david-share/app/static/share.css` — both had the exact same hex values
 copy-pasted under different variable names.
 
+## Claude Code skills
+
+`claude-skills/` — personally-authored Claude Code commands and skills
+(Bitwarden vault search, Arch/CachyOS package help, Hyprland config help,
+rofi bookmarks/commands, YouTube transcripts, plus reusable VPS-ops,
+site-publishing, notify, and interactive-review-page templates). See
+`claude-skills/README.md` for the full list, what's genericized vs.
+template-with-config, and what was deliberately left out as too entangled
+with personal infrastructure to publish responsibly.
+
 ## Design system
 
 Two deliberately different visual languages across the fleet, not

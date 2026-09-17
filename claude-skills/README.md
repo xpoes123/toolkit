@@ -30,6 +30,7 @@ Two kinds of files, matching Claude Code's own conventions:
 | `skills/notify/` | Ping yourself (Discord/Slack/etc.) when work finishes | **Template** — swapped a private bot API for a generic Discord-webhook example script |
 | `skills/propose/` | Publish an interactive Tokyo-Night review page (react to design decisions, copy feedback back) instead of a wall of chat text | **Template** — site/VPS coordinates are env-configurable, manifest-registry step optional |
 | `skills/memory-refresh/` | Weekly sweep of Claude Code transcripts for memory-worthy facts your session missed | Lightly genericized — assumes you run a `MEMORY.md`-style memory index |
+| `skills/gm-brief/` | Fan out subagents to deep-dive a project/domain, rank automation ideas, scope the top ones, publish + notify | Generic from the start — composes with `notify/` and `share-publish.md` |
 
 ## Config conventions
 

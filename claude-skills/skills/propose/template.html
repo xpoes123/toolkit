@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>__DOCTITLE__</title>
+<style>
+  :root{
+    --bg:#1a1b26; --surface:#20232f; --surface-2:#252a3a; --line:#2b3145; --line-2:#232838;
+    --text:#c0caf5; --dim:#a9b1d6; --muted:#565f89; --faint:#3b4363;
+    --blue:#7aa2f7; --green:#9ece6a; --red:#f7768e; --amber:#e0af68; --purple:#bb9af7; --cyan:#7dcfff;
+    --mono:ui-monospace,"JetBrains Mono","SF Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.55;
+    -webkit-font-smoothing:antialiased; padding:0 0 130px}
+  .num{font-family:var(--mono)}
+  .wrap{max-width:640px; margin:0 auto; padding:24px 16px}
+
+  header.top{text-align:center; padding:18px 0 8px}
+  header.top .eyebrow{font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--blue)}
+  header.top .eyebrow.sign{color:var(--amber)}
+  header.top h1{margin:8px 0 6px; font-size:26px; font-weight:750; letter-spacing:-.01em; text-wrap:balance}
+  header.top p{margin:0 auto; max-width:470px; color:var(--dim); font-size:14.5px}
+  .how{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:15px 0 4px; font-size:12.5px; color:var(--muted)}
+  .how b{color:var(--dim)}
+
+  .card{background:var(--surface); border:1px solid var(--line-2); border-radius:16px; padding:20px 18px 16px; margin:16px 0; scroll-margin-top:16px}
+  .card .n{font-family:var(--mono); font-size:12px; color:var(--faint); font-weight:700}
+  .card .tag{font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--blue); font-weight:700; margin:4px 0}
+  .card .tag.sugg{color:var(--amber)}
+  .card h2{margin:2px 0 6px; font-size:19px; font-weight:700; letter-spacing:-.01em; text-wrap:balance}
+  .card p{margin:6px 0; color:var(--dim); font-size:14.5px}
+  .card ul{margin:8px 0; padding-left:18px; color:var(--dim); font-size:14px}
+  .card li{margin:4px 0}
+  .card b,.card strong{color:var(--text); font-weight:600}
+  .k{color:var(--blue); font-weight:600}
+
+  /* reusable mockup helpers (use in section html) */
+  .mock{background:var(--bg); border:1px solid var(--line); border-radius:11px; padding:14px; margin:12px 0; font-family:var(--mono); font-size:12.5px}
+  .hero{font-size:32px; font-weight:800; letter-spacing:-.02em}
+  .hero.over{color:var(--red)} .hero.under{color:var(--green)}
+  .subline{color:var(--muted); font-size:12px; margin-top:2px}
+  .tabbar{display:flex; gap:1px; background:var(--line-2); border:1px solid var(--line-2); border-radius:9px; overflow:hidden}
+  .tabbar div{flex:1; text-align:center; padding:9px 4px; background:var(--surface); font-size:12px; color:var(--muted)}
+  .tabbar div.on{background:var(--surface-2); color:var(--blue); font-weight:700}
+  .bar{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden;position:relative}
+  .bar i{position:absolute;inset:0 auto 0 0;border-radius:4px;background:var(--blue)}
+  table.tradeoff{width:100%; border-collapse:collapse; margin:12px 0; font-size:13px}
+  table.tradeoff th,table.tradeoff td{border:1px solid var(--line); padding:7px 9px; text-align:left; color:var(--dim)}
+  table.tradeoff th{background:var(--surface-2); color:var(--text); font-weight:600}
+  .rev{color:var(--red)} .grn{color:var(--green)} .amb{color:var(--amber)}
+
+  .react{display:flex; gap:8px; margin-top:14px; flex-wrap:wrap}
+  .react button{appearance:none; font:inherit; font-size:13px; cursor:pointer; border-radius:9px; padding:8px 13px;
+    background:var(--surface-2); border:1px solid var(--line); color:var(--dim); transition:all .12s; display:flex; align-items:center; gap:6px}
+  .react button:hover{border-color:var(--faint)}
+  .react button.on[data-r="love"]{background:color-mix(in srgb,var(--green) 18%,transparent); border-color:var(--green); color:var(--green)}
+  .react button.on[data-r="tweak"]{background:color-mix(in srgb,var(--amber) 18%,transparent); border-color:var(--amber); color:var(--amber)}
+  .react button.on[data-r="no"]{background:color-mix(in srgb,var(--red) 18%,transparent); border-color:var(--red); color:var(--red)}
+  .note{margin-top:9px} .note[hidden]{display:none}
+  .note textarea{width:100%; background:var(--bg); border:1px solid var(--line); border-radius:9px; color:var(--text);
+    font-family:var(--sans); font-size:13.5px; padding:9px 11px; resize:vertical; min-height:44px; outline:none}
+  .note textarea:focus{border-color:var(--blue)}
+
+  /* blueprint sign-off gate */
+  .gate{background:var(--surface); border:1px solid var(--amber); border-radius:16px; padding:20px 18px; margin:22px 0 6px}
+  .gate h2{margin:0 0 4px; font-size:19px} .gate p{color:var(--dim); font-size:14px; margin:4px 0 12px}
+  .gate .opts{display:flex; flex-direction:column; gap:8px}
+  .gate .opts button{appearance:none; font:inherit; font-size:14px; text-align:left; cursor:pointer; border-radius:10px;
+    padding:12px 14px; background:var(--surface-2); border:1px solid var(--line); color:var(--dim)}
+  .gate .opts button.on{border-color:var(--blue); color:var(--text); background:color-mix(in srgb,var(--blue) 14%,transparent)}
+  .gate[hidden]{display:none}
+
+  .summary{position:fixed; left:0; right:0; bottom:0; background:color-mix(in srgb,var(--bg) 92%,transparent);
+    backdrop-filter:blur(8px); border-top:1px solid var(--line); padding:11px 14px; z-index:20}
+  .summary .in{max-width:640px; margin:0 auto; display:flex; align-items:center; gap:12px; font-size:13px}
+  .summary .tally{color:var(--muted); flex:1} .summary .tally b{font-family:var(--mono)}
+  .summary button{appearance:none; font:inherit; font-weight:600; cursor:pointer; background:var(--blue); color:#0d1020;
+    border:0; border-radius:9px; padding:9px 15px; font-size:13px}
+  .out{max-width:640px; margin:20px auto 0; padding:0 16px} .out[hidden]{display:none}
+  .out textarea{width:100%; min-height:130px; background:var(--surface); border:1px solid var(--line); border-radius:11px;
+    color:var(--text); font-family:var(--mono); font-size:12.5px; padding:12px; outline:none}
+  .final{text-align:center; color:var(--muted); font-size:13px; margin-top:26px; padding:0 16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow" id="eyebrow"></div>
+    <h1 id="doctitle"></h1>
+    <p id="subtitle"></p>
+    <div class="how"><span>👍 <b>love it</b></span><span>🤔 <b>tweak</b> (note)</span><span>👎 <b>nope</b></span></div>
+    <div class="how" style="margin-top:2px"><b id="deccount"></b> · react on each · hit <b>Copy my feedback</b> at the end</div>
+  </header>
+  <div id="cards"></div>
+  <div class="gate" id="gate" hidden>
+    <h2>🔏 Overall sign-off</h2>
+    <p>Your verdict on the design as a whole:</p>
+    <div class="opts">
+      <button data-v="approve">✅ Approve — build it</button>
+      <button data-v="changes">✍️ Approve with the changes I noted</button>
+      <button data-v="rework">🔁 Needs rework — let's talk</button>
+    </div>
+  </div>
+  <div class="out" id="outbox" hidden><textarea id="outtext" readonly></textarea></div>
+  <div class="final" id="finalnote"></div>
+</div>
+<div class="summary"><div class="in">
+  <span class="tally" id="tally">Tap reactions as you read…</span>
+  <button id="copybtn">Copy my feedback</button>
+</div></div>
+
+<script>
+const META = /*__META__*/{};
+const SECTIONS = /*__SECTIONS__*/[];
+const RL={love:"👍 Love it",tweak:"🤔 Tweak",no:"👎 Nope"};
+const VL={approve:"✅ APPROVED — build it",changes:"✍️ Approve WITH my noted changes",rework:"🔁 Needs rework"};
+const $=s=>document.querySelector(s);
+const LS="propose_"+(META.docKey||"doc");
+const state=JSON.parse(localStorage.getItem(LS)||"{}");
+const sign=META.mode==="blueprint";
+
+$("#eyebrow").textContent=sign?"Architecture · sign-off":"Design proposal";
+$("#eyebrow").className="eyebrow"+(sign?" sign":"");
+$("#doctitle").textContent=META.title||"Proposal";
+$("#subtitle").textContent=META.subtitle||"Your call on each piece — react to anything that's off.";
+$("#deccount").textContent=SECTIONS.length+" decisions";
+$("#finalnote").textContent=sign?"Once you sign off I'll turn this into a build plan.":"Send your reactions and I'll lock it in.";
+document.title=(META.title||"Proposal");
+
+const cards=$("#cards");
+SECTIONS.forEach((s,i)=>{
+  const el=document.createElement("div"); el.className="card"; el.id="c"+i;
+  const tagcls="tag"+(s.suggest?" sugg":"");
+  el.innerHTML=`<div class="n">${String(i+1).padStart(2,"0")} / ${SECTIONS.length}</div>
+    ${s.tag?`<div class="${tagcls}">${s.tag}</div>`:""}<h2>${s.title||""}</h2>${s.html||""}
+    <div class="react"><button data-r="love">👍 Love it</button><button data-r="tweak">🤔 Tweak</button><button data-r="no">👎 Nope</button></div>
+    <div class="note" hidden><textarea placeholder="What would you change?"></textarea></div>`;
+  cards.appendChild(el);
+  const saved=state["s"+i]||{}, note=el.querySelector(".note"), ta=el.querySelector("textarea");
+  if(saved.note)ta.value=saved.note;
+  el.querySelectorAll(".react button").forEach(b=>{
+    if(saved.r===b.dataset.r)b.classList.add("on");
+    b.onclick=()=>{const r=b.dataset.r;
+      el.querySelectorAll(".react button").forEach(x=>x.classList.remove("on"));
+      if(saved.r===r)delete saved.r; else {saved.r=r; b.classList.add("on");}
+      note.hidden=!(saved.r==="tweak"||saved.r==="no"); state["s"+i]=saved; persist();};
+  });
+  note.hidden=!(saved.r==="tweak"||saved.r==="no");
+  ta.oninput=()=>{saved.note=ta.value; state["s"+i]=saved; persist();};
+});
+
+if(sign){
+  $("#gate").hidden=false;
+  const g=state.verdict;
+  $("#gate").querySelectorAll(".opts button").forEach(b=>{
+    if(g===b.dataset.v)b.classList.add("on");
+    b.onclick=()=>{$("#gate").querySelectorAll(".opts button").forEach(x=>x.classList.remove("on"));
+      if(state.verdict===b.dataset.v)delete state.verdict; else {state.verdict=b.dataset.v; b.classList.add("on");}
+      persist();};
+  });
+}
+
+function persist(){localStorage.setItem(LS,JSON.stringify(state)); tally();}
+function tally(){
+  let love=0,tweak=0,no=0,done=0;
+  SECTIONS.forEach((s,i)=>{const r=(state["s"+i]||{}).r; if(r){done++; if(r==="love")love++; if(r==="tweak")tweak++; if(r==="no")no++;}});
+  let t = done===0?"Tap reactions as you read…":`<b>${done}/${SECTIONS.length}</b> · 👍<b>${love}</b> 🤔<b>${tweak}</b> 👎<b>${no}</b>`;
+  if(sign&&state.verdict)t+=` · ${VL[state.verdict].split(" ")[0]}`;
+  $("#tally").innerHTML=t;
+}
+function feedbackText(){
+  const L=[`My feedback — ${META.title||"proposal"}:`,""];
+  if(sign&&state.verdict)L.push(`VERDICT: ${VL[state.verdict]}`,"");
+  SECTIONS.forEach((s,i)=>{const d=state["s"+i]||{}; if(!d.r)return;
+    let ln=`${i+1}. ${(s.title||"").replace(/<[^>]+>/g,"")} → ${RL[d.r]}`;
+    if(d.note&&d.note.trim())ln+=` — ${d.note.trim()}`; L.push(ln);});
+  const un=SECTIONS.map((s,i)=>i).filter(i=>!(state["s"+i]||{}).r);
+  if(un.length)L.push("",`(no reaction on: ${un.map(i=>i+1).join(", ")})`);
+  return L.join("\n");
+}
+$("#copybtn").onclick=async()=>{
+  const t=feedbackText(), box=$("#outbox"), out=$("#outtext");
+  box.hidden=false; out.value=t; out.scrollIntoView({behavior:"smooth"}); out.select();
+  try{await navigator.clipboard.writeText(t); flash();}catch(e){flash(true);}
+};
+function flash(fallback){const b=$("#copybtn"),o=b.textContent; b.textContent=fallback?"Select & copy ↑":"Copied ✓"; setTimeout(()=>b.textContent=o,2200);}
+tally();
+</script>
+</body>
+</html>

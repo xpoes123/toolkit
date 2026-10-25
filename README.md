@@ -12,6 +12,10 @@ this logic and keep running exactly as before. Migrating each one over is a
 separate, deliberate follow-up — several of these repos are live production
 systems (real Discord users, real trades), so swapping their internals for a
 shared dependency happens one repo at a time, on request, not in bulk.
+For `discord_kit.py`, the named starting points are `sage/cogs/chat.py` (28
+bare try/except) + `sage/cogs/gcal.py` (8), and `stavid/src/cogs/reminders.py`
++ `budget.py` (no centralized error handling at all) — start there, not with
+a generic sweep.
 
 ## Modules
 

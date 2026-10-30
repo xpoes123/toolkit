@@ -122,6 +122,24 @@ def compute_clv(
     return juice_clv
 
 
+def kalshi_price_to_prob(cents: int | None) -> float | None:
+    """Kalshi/CLOB integer cents (0-100) -> probability (0-1). `None` in ->
+    `None` out; a real 0c/100c quote (deep OOTM) is legal and passes through
+    unchanged. Turning an empty orderbook side into `None` before it gets here
+    is the caller's job (see live-trader's kalshi.py orderbook() for the
+    empty-side check) — this adapter won't silently coerce a missing quote
+    into a phantom 0.0 probability."""
+    return None if cents is None else cents / 100
+
+
+def compute_clv_prob(bet_prob: float, close_prob: float) -> float:
+    """Closing-line value in percentage points, for venues that already quote
+    probability (Kalshi/CLOB) instead of American odds. Pure juice CLV, no
+    line-movement adjustment (that's a spread/total-market concept — doesn't
+    apply to a binary 0-1 market)."""
+    return (close_prob - bet_prob) * 100
+
+
 def parse_odds_input(raw: str) -> tuple[int, str]:
     """Parse odds in any format a human might type and return (american, label).
 
@@ -200,6 +218,10 @@ def _demo() -> None:
     assert kelly_fraction(0.4, 100) == 0.0  # no edge -> stake nothing
     clv = compute_clv(-110, -120)
     assert clv > 0  # closed shorter than you bet -> positive CLV
+    assert kalshi_price_to_prob(52) == 0.52
+    assert kalshi_price_to_prob(None) is None
+    assert kalshi_price_to_prob(0) == 0.0  # real deep-OOTM quote, not "empty" -- caller's job to filter that
+    assert compute_clv_prob(0.45, 0.52) > 0
     print("oddsmath self-check OK")
 
 

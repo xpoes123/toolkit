@@ -81,10 +81,10 @@ local state if the pull isn't a clean fast-forward.
 git-pull-deploy.sh /opt/finance finance-app
 ```
 
-### `web/tokyo-night.css`
-Shared CSS custom properties, extracted from `finance/index.html` and
-`david-share/app/static/share.css` — both had the exact same hex values
-copy-pasted under different variable names.
+### `web/ui/`
+The shared design system: tokens, themes (`davidj` default, `ink`, `paper`,
+`tokyo-night`), layout primitives and `ui-*` components. See `web/ui/README.md`.
+`web/tokyo-night.css` is the legacy variables-only file, superseded.
 
 ## Consuming it
 
@@ -112,22 +112,13 @@ with personal infrastructure to publish responsibly.
 
 ## Design system
 
-Two deliberately different visual languages across the fleet, not
-inconsistency:
-
-- **Personal single-user tools** (finance, david-share, future ones in the
-  same category) — Tokyo Night dark, matching the desktop. Use
-  `web/tokyo-night.css`. These are tools David uses himself; they should
-  look like the rest of his machine.
-- **Public-facing products** (scibowl-org — students/coaches; davidJ — a
-  public portfolio) — their own branding, not Tokyo Night. scibowl-org is
-  light-themed and Tailwind-based on purpose (a product for a general
-  audience); davidJ uses a warm gold accent + different type system on
-  purpose (personal-brand identity, distinct from "David's internal tool"
-  aesthetic). Don't retrofit Tokyo Night onto either.
-
-Rule of thumb: if the only users are David (and maybe Steph), it's Tokyo
-Night. If it's a product other people log into, it gets its own identity.
+Personal single-user tools all use `web/ui/` (default theme `davidj`, matching
+the personal site) via one stylesheet, so redesigning is one edit here. New
+colors/components/assets go in `web/ui/`, never into a consuming repo.
+Public-facing products (scibowl-org, davidJ, poverty-football, redherring,
+tv, games) keep their own branding on purpose. Rule of thumb: if the only
+users are David (and maybe Steph), use `web/ui/`; if other people log in, it
+gets its own identity.
 
 ## Self-checks
 

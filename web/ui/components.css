@@ -86,6 +86,8 @@
 .ui-display { display: flex; align-items: baseline; gap: .1em; margin: 0; font: 500 var(--fs-display)/.95 var(--font-sans);
   letter-spacing: -.03em; font-variant-numeric: tabular-nums lining-nums; color: var(--text); }
 .ui-display__unit { font-size: .38em; letter-spacing: 0; color: var(--text-2); }
+.ui-display.ui-pos, .ui-panel__v.ui-pos, .ui-tile__v.ui-pos { color: var(--ok); }
+.ui-display.ui-neg, .ui-panel__v.ui-neg, .ui-tile__v.ui-neg { color: var(--bad); }
 
 /* section header: label left, total or link right */
 .ui-sechead { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3);
@@ -143,12 +145,12 @@ a.ui-row:hover .ui-row__title, button.ui-row:hover .ui-row__title { color: var(-
 /* form controls: .ui-controls themes every native input/select/textarea inside it */
 .ui-controls { accent-color: var(--accent); color-scheme: dark; }
 [data-theme="paper"] .ui-controls, .ui-controls[data-theme="paper"] { color-scheme: light; }
-.ui-controls :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="hidden"]), select, textarea),
+.ui-controls :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="hidden"]), select, textarea),
 .ui-select, .ui-textarea {
   box-sizing: border-box; min-height: var(--touch); padding: 0 var(--space-3); font: inherit; font-size: 16px;
   color: var(--text); background: var(--surface-2); border: 1px solid var(--line-2); border-radius: var(--radius); }
-.ui-controls textarea, .ui-textarea { padding: var(--space-2) var(--space-3); min-height: 88px; }
-.ui-controls select, .ui-select { appearance: none; padding-right: 32px; background-repeat: no-repeat;
+.ui-controls :where(textarea), .ui-textarea { padding: var(--space-2) var(--space-3); min-height: 88px; }
+.ui-controls :where(select), .ui-select { appearance: none; padding-right: 32px; background-repeat: no-repeat;
   background-image: linear-gradient(45deg, transparent 50%, var(--text-2) 50%), linear-gradient(135deg, var(--text-2) 50%, transparent 50%);
   background-position: calc(100% - 17px) 52%, calc(100% - 12px) 52%; background-size: 5px 5px; }
 .ui-controls :is(input, select, textarea):focus-visible, .ui-select:focus-visible, .ui-textarea:focus-visible {

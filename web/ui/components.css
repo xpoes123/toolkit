@@ -96,6 +96,7 @@
 .ui-sechead a, .ui-sechead button { font: var(--fs-small)/1.4 var(--font-sans); letter-spacing: 0; text-transform: none;
   color: var(--text-2); text-decoration: none; background: none; border: 0; padding: 0; cursor: pointer; }
 .ui-sechead a:hover, .ui-sechead button:hover { color: var(--text); }
+.ui-sechead :is(a, button) { padding: 12px 0; margin: -12px 0; }   /* 44px hit area, same visual height */
 
 /* list of rows on hairlines: label left, amount right */
 .ui-list { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
@@ -109,6 +110,7 @@ a.ui-row:hover .ui-row__title, button.ui-row:hover .ui-row__title { color: var(-
 .ui-row__lead { display: flex; align-items: center; gap: var(--space-3); min-width: 0; flex: 1 1 auto; }
 .ui-row__title { font-size: var(--fs-body); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ui-row__meta { font-size: var(--fs-small); color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ui-row__meta--wrap { white-space: normal; overflow: visible; }
 .ui-row__amt { flex: 0 0 auto; font-size: var(--fs-body); text-align: right; white-space: nowrap; }
 .ui-row__amt small { display: block; font-size: var(--fs-small); color: var(--muted); }
 .ui-row__flag { flex: 0 0 auto; width: 3px; align-self: stretch; margin: var(--space-1) 0; background: var(--accent); }
@@ -198,7 +200,7 @@ a.ui-row:hover .ui-row__title, button.ui-row:hover .ui-row__title { color: var(-
   .ui-cols { max-width: var(--cols-max, 1120px); display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     column-gap: var(--space-6); align-items: start; }
   .ui-cols > * { grid-column: 1 / -1; }
-  .ui-cols .ui-cols__main, .ui-cols .ui-cols__side { display: flex; flex-direction: column; gap: inherit; min-width: 0; }
+  .ui-cols .ui-cols__main, .ui-cols .ui-cols__side { display: flex; flex-direction: column; gap: var(--cols-gap, var(--space-5)); min-width: 0; }
   .ui-cols .ui-cols__main { grid-column: 1; }
   .ui-cols .ui-cols__side { grid-column: 2; }
 }

@@ -1,5 +1,5 @@
 /* Matches davidJ (personal site): warm near-black, bone text, gold accent, rust for errors. */
-[data-theme="davidj"] {
+:root, [data-theme="davidj"] {
   --font-sans: "Space Grotesk", system-ui, sans-serif;
   --font-serif: "Newsreader", Georgia, serif;
   --bg: #14131a;
@@ -16,4 +16,7 @@
   --warn: #d4a955;
   --info: #7fa7c4;
   --on-accent: #14131a;
+  --purple: #a58bb8;
+  /* legacy aliases (tokyo-night era names) */
+  --blue: var(--accent); --green: var(--ok); --red: var(--bad); --yellow: var(--warn);
 }

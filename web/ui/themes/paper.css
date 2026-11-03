@@ -1,0 +1,17 @@
+/* Warm light: paper background, ink text, one deep accent. */
+:root {
+  --bg: #f5f2ea;
+  --surface: #fbf9f3;
+  --surface-2: #efebe0;
+  --line: #ddd7c8;
+  --line-2: #c3bba7;
+  --text: #1f1d18;
+  --text-2: #4a463c;
+  --muted: #837d6d;
+  --accent: #2f5d50;
+  --ok: #3f7a3a;
+  --bad: #b23a2e;
+  --warn: #a8741a;
+  --info: #2c5f86;
+  --on-accent: #fbf9f3;
+}

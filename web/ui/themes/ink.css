@@ -1,0 +1,17 @@
+/* Calm neutral dark: near-black ink, one restrained accent, low saturation status colors. */
+:root {
+  --bg: #111214;
+  --surface: #191b1e;
+  --surface-2: #151618;
+  --line: #26292d;
+  --line-2: #363a40;
+  --text: #e4e5e7;
+  --text-2: #b3b6bb;
+  --muted: #7a7f87;
+  --accent: #d9a85b;
+  --ok: #8fb573;
+  --bad: #d0675f;
+  --warn: #d9a85b;
+  --info: #7fa7c4;
+  --on-accent: #111214;
+}

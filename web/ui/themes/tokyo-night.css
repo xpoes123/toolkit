@@ -1,0 +1,20 @@
+/* Tokyo Night Dark. Semantic names; legacy names kept as aliases. */
+:root {
+  --bg: #1a1b26;
+  --surface: #24283b;
+  --surface-2: #1f2335;
+  --line: #2f3549;
+  --line-2: #414868;
+  --text: #c0caf5;
+  --text-2: #a9b1d6;
+  --muted: #565f89;
+  --accent: #7aa2f7;
+  --ok: #9ece6a;
+  --bad: #f7768e;
+  --warn: #e0af68;
+  --info: #7dcfff;
+  --on-accent: #1a1b26;
+  /* legacy aliases */
+  --blue: var(--accent); --purple: #bb9af7; --green: var(--ok);
+  --red: var(--bad); --yellow: var(--warn);
+}

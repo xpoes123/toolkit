@@ -128,7 +128,13 @@ def kalshi_price_to_prob(cents: int | None) -> float | None:
     unchanged. Turning an empty orderbook side into `None` before it gets here
     is the caller's job (see live-trader's kalshi.py orderbook() for the
     empty-side check) — this adapter won't silently coerce a missing quote
-    into a phantom 0.0 probability."""
+    into a phantom 0.0 probability.
+
+    Assumes integer cents, not a 0-1 float. Some clients (e.g. SharpLab's)
+    already hand back dollar floats like `yes_bid_dollars` — feed one of
+    those in here and you'll divide by 100 a second time, landing a CLV
+    reading ~100x off. If your client already gives you 0-1, skip this
+    function and call `compute_clv_prob` directly."""
     return None if cents is None else cents / 100
 
 

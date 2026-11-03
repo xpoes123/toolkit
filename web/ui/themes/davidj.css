@@ -1,0 +1,19 @@
+/* Matches davidJ (personal site): warm near-black, bone text, gold accent, rust for errors. */
+[data-theme="davidj"] {
+  --font-sans: "Space Grotesk", system-ui, sans-serif;
+  --font-serif: "Newsreader", Georgia, serif;
+  --bg: #14131a;
+  --surface: #1c1b25;
+  --surface-2: #17161e;
+  --line: #2a2933;
+  --line-2: #3b3a45;
+  --text: #e8e3d8;
+  --text-2: #a8a39a;
+  --muted: #7c7971;
+  --accent: #d4a955;
+  --ok: #8fb573;
+  --bad: #b54c4c;
+  --warn: #d4a955;
+  --info: #7fa7c4;
+  --on-accent: #14131a;
+}

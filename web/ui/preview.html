@@ -1,6 +1,6 @@
 <!doctype html>
 <meta charset="utf-8"><title>ui preview</title>
-<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="primitives.css"><link rel="stylesheet" href="themes/tokyo-night.css"><link rel="stylesheet" href="themes/ink.css"><link rel="stylesheet" href="themes/paper.css"><link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="primitives.css"><link rel="stylesheet" href="themes/tokyo-night.css"><link rel="stylesheet" href="themes/ink.css"><link rel="stylesheet" href="themes/paper.css"><link rel="stylesheet" href="themes/davidj.css"><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&family=Newsreader&display=swap" rel="stylesheet"><link rel="stylesheet" href="components.css">
 <style>
  body{margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
  .pane{padding:24px;display:grid;gap:16px;align-content:start;background:var(--bg);color:var(--text);font:14px/1.5 var(--font-sans)}
@@ -9,7 +9,7 @@
 </style>
 <body>
 <script>
-for(const t of ["tokyo-night","ink","paper"])document.body.insertAdjacentHTML("beforeend",`
+for(const t of ["tokyo-night","ink","davidj","paper"])document.body.insertAdjacentHTML("beforeend",`
 <section class="pane" data-theme="${t}"><h2>${t}</h2>
  <div class="ui-topbar"><b>share</b><span class="ui-muted">feed</span><span class="ui-muted">admin</span></div>
  <div class="ui-tabs"><button class="ui-tab" aria-selected="true">Overview</button><button class="ui-tab">Bets</button></div>

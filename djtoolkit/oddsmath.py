@@ -135,6 +135,8 @@ def kalshi_price_to_prob(cents: int | None) -> float | None:
     those in here and you'll divide by 100 a second time, landing a CLV
     reading ~100x off. If your client already gives you 0-1, skip this
     function and call `compute_clv_prob` directly."""
+    if cents is not None:
+        assert 0 <= cents <= 100, f"kalshi cents out of range: {cents!r} (dollar float instead of cents?)"
     return None if cents is None else cents / 100
 
 
@@ -144,6 +146,23 @@ def compute_clv_prob(bet_prob: float, close_prob: float) -> float:
     line-movement adjustment (that's a spread/total-market concept — doesn't
     apply to a binary 0-1 market)."""
     return (close_prob - bet_prob) * 100
+
+
+def clob_fee(price_cents: int, size: int) -> float:
+    """Kalshi taker fee estimate in dollars: ceil(0.07 * size * P * (1-P) * 100) / 100,
+    P = price_cents / 100. Ported from live-trader's app.py:taker_fee.
+
+    Two caveats, non-negotiable, read before calling:
+    1. `price_cents` must already be side-adjusted — NO-side callers convert
+       first (same contract as `kalshi_price_to_prob`, which this reuses for
+       its cents-range validation, so there's one boundary check, not two).
+    2. This is a pre-trade *estimate* for sizing/thresholds, not the settled
+       fee off the fill — once an order fills, use the fill's actual fee
+       (e.g. live-trader's `fee_per`), don't recompute this and treat it as
+       real."""
+    import math
+    p = kalshi_price_to_prob(price_cents)
+    return math.ceil(0.07 * size * p * (1.0 - p) * 100) / 100.0
 
 
 def parse_odds_input(raw: str) -> tuple[int, str]:
@@ -228,6 +247,13 @@ def _demo() -> None:
     assert kalshi_price_to_prob(None) is None
     assert kalshi_price_to_prob(0) == 0.0  # real deep-OOTM quote, not "empty" -- caller's job to filter that
     assert compute_clv_prob(0.45, 0.52) > 0
+    assert clob_fee(50, 10) == 0.18  # ceil(0.07*10*0.5*0.5*100)/100 = ceil(17.5)/100
+    rejected = False
+    try:
+        clob_fee(150, 10)  # dollar float (1.50) fed in as "cents" -> out of range
+    except AssertionError:
+        rejected = True
+    assert rejected, "clob_fee should reject out-of-range price_cents"
     print("oddsmath self-check OK")
 
 

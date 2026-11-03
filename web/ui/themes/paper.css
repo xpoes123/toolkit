@@ -14,4 +14,8 @@
   --warn: #a8741a;
   --info: #2c5f86;
   --on-accent: #fbf9f3;
+  --surface-3: #ffffff; --pink: #b8506e;
+  --cat-1: #3d6f94; --cat-2: #9a5a34; --cat-3: #2f7a6c; --cat-4: #7d528c;
+  --cat-5: #6b7530; --cat-6: #a34d63; --cat-7: #4c58a0; --cat-8: #85683b;
+  --div-neg-2: #3f7a3a; --div-neg-1: #9cbb94; --div-mid: #ddd7c8; --div-pos-1: #d9a59e; --div-pos-2: #b23a2e;
 }

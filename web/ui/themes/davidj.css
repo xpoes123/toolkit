@@ -5,18 +5,27 @@
   --bg: #14131a;
   --surface: #1c1b25;
   --surface-2: #17161e;
+  --surface-3: #24232e;   /* the one raised surface on a screen (focus card, sheet) */
   --line: #2a2933;
   --line-2: #3b3a45;
   --text: #e8e3d8;
   --text-2: #a8a39a;
-  --muted: #7c7971;
-  --accent: #d4a955;
-  --ok: #8fb573;
-  --bad: #b54c4c;
+  --muted: #8a8680;       /* 5.1:1 on --bg (was #7c7971, 4.25:1) */
+  --accent: #d4a955;      /* gold: the single primary action or current focus only */
+  --ok: #8fb573;          /* deltas / under budget only */
+  --bad: #cc6a62;         /* deltas / over budget only; 5.1:1 on --bg */
   --warn: #d4a955;
   --info: #7fa7c4;
   --on-accent: #14131a;
   --purple: #a58bb8;
+  --pink: #f2a7bb;        /* celebration / streak accent, used sparingly */
+  /* categorical: 8 muted hues for categories and chart series, no semantic meaning */
+  --cat-1: #7fa7c4; --cat-2: #c48f6a; --cat-3: #6fae9f; --cat-4: #b48fc0;
+  --cat-5: #a9b46a; --cat-6: #d08c9c; --cat-7: #8c95cf; --cat-8: #c2a77d;
+  /* diverging: below <- neutral -> above (e.g. vs budget, vs usual) */
+  --div-neg-2: #8fb573; --div-neg-1: #5f7a52; --div-mid: #2a2933; --div-pos-1: #8a4c48; --div-pos-2: #cc6a62;
   /* legacy aliases (tokyo-night era names) */
   --blue: var(--accent); --green: var(--ok); --red: var(--bad); --yellow: var(--warn);
 }
+/* Terminal density sits on a deeper black. */
+:root[data-density="terminal"], [data-theme="davidj"][data-density="terminal"] { --bg: #0f0e13; --surface-2: #14131a; }

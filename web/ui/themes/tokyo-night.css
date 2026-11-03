@@ -17,4 +17,8 @@
   /* legacy aliases */
   --blue: var(--accent); --purple: #bb9af7; --green: var(--ok);
   --red: var(--bad); --yellow: var(--warn);
+  --surface-3: #292e42; --pink: #f4a6c0;
+  --cat-1: #7aa2f7; --cat-2: #ff9e64; --cat-3: #73daca; --cat-4: #bb9af7;
+  --cat-5: #9ece6a; --cat-6: #f7768e; --cat-7: #7dcfff; --cat-8: #e0af68;
+  --div-neg-2: #9ece6a; --div-neg-1: #5a7a3e; --div-mid: #2f3549; --div-pos-1: #9a4a5a; --div-pos-2: #f7768e;
 }

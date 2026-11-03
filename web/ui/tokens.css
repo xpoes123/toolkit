@@ -1,12 +1,35 @@
 /* Theme-agnostic scales. Colors live in themes/*.css (semantic names only). */
-:root {
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
 
+/* Self-hosted fonts (latin subset, variable weight, SIL OFL 1.1: fonts/OFL.txt). URLs are relative to the
+   stylesheet, so an app that serves /ui/ui.css must also serve /ui/fonts/* (cross-origin: with CORS). */
+@font-face { font-family: "Space Grotesk"; font-style: normal; font-weight: 300 700; font-display: swap;
+  src: url("fonts/space-grotesk.woff2") format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-style: normal; font-weight: 100 800; font-display: swap;
+  src: url("fonts/jetbrains-mono.woff2") format("woff2"); }
+@font-face { font-family: "Newsreader"; font-style: normal; font-weight: 200 800; font-display: swap;
+  src: url("fonts/newsreader.woff2") format("woff2"); }
+@font-face { font-family: "Newsreader"; font-style: italic; font-weight: 200 800; font-display: swap;
+  src: url("fonts/newsreader-italic.woff2") format("woff2"); }
+
+:root {
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Newsreader", Georgia, serif;
+
+  /* legacy size names (kept for existing consumers) */
   --text-xs: 11px; --text-sm: 12px; --text-md: 14px; --text-lg: 18px; --text-xl: 28px;
 
-  --space-1: 4px; --space-2: 8px; --space-3: 12px;
-  --space-4: 16px; --space-5: 24px; --space-6: 32px;
+  /* Type scale for new work: meta 11 (mono labels, dates) / small 13 (row metadata) / body 15 /
+     lead 17 (serif notes, card titles) / title 24 / display (one focal number per screen). */
+  --fs-meta: 11px; --fs-small: 13px; --fs-body: 15px; --fs-lead: 17px; --fs-title: 24px;
+  --fs-display: clamp(56px, 17vw, 72px);
 
-  --radius-sm: 4px; --radius: 8px; --radius-lg: 12px; --radius-pill: 999px;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px;
+  --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px;
+
+  /* Radii: only these (check.sh flags literal border-radius values). */
+  --radius-sm: 4px; --radius: 8px; --radius-lg: 12px; --radius-xl: 20px; --radius-pill: 999px;
+
+  --touch: 44px;   /* minimum tap target */
+  --row-h: 52px;   /* list row */
 }

@@ -17,4 +17,6 @@
   /* legacy aliases */
   --blue: var(--accent); --purple: #bb9af7; --green: var(--ok);
   --red: var(--bad); --yellow: var(--warn);
+  /* election maps: parties (Dem / Rep / Ind) */
+  --party-d: #7aa2f7; --party-r: #f7768e; --party-i: #bb9af7;
 }

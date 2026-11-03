@@ -19,4 +19,6 @@
   --purple: #a58bb8;
   /* legacy aliases (tokyo-night era names) */
   --blue: var(--accent); --green: var(--ok); --red: var(--bad); --yellow: var(--warn);
+  /* election maps: parties (Dem / Rep / Ind) */
+  --party-d: #7fa7c4; --party-r: #c96a5f; --party-i: #a58bb8;
 }

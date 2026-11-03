@@ -14,4 +14,6 @@
   --warn: #a8741a;
   --info: #2c5f86;
   --on-accent: #fbf9f3;
+  /* election maps: parties (Dem / Rep / Ind) */
+  --party-d: #2c5f86; --party-r: #b23a2e; --party-i: #6b4f8a;
 }

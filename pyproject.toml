@@ -1,12 +1,13 @@
 [project]
 name = "djtoolkit"
-version = "0.1.0"
-description = "Shared utilities extracted from David's ~/code repos: Discord bot kit, odds math, hash-seeded avatars."
+version = "0.2.0"
+description = "Shared utilities extracted from David's ~/code repos: Discord bot kit, odds math, hash-seeded avatars, Kalshi API auth/client."
 requires-python = ">=3.12"
 dependencies = []
 
 [project.optional-dependencies]
 discord = ["discord.py"]
+kalshi = ["cryptography", "httpx"]
 
 [build-system]
 requires = ["setuptools>=68"]

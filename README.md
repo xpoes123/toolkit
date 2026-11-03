@@ -6,9 +6,9 @@ Each module below names its origin repo — read that file first if you want
 the full context/history, this is the stripped-down, dependency-minimal
 version.
 
-**Status: v1, not yet wired into any live repo.** sage, stavid, SharpLab,
-nba-modeling, and nsba-markets all currently have their own local copies of
-this logic and keep running exactly as before. Migrating each one over is a
+**Status:** `oddsmath` and `kalshi` are imported by live repos (SharpLab,
+live-trader, finance, vigil). The rest is v1 — sage, stavid, nba-modeling,
+and nsba-markets still have their own local copies of that logic. Migrating each one over is a
 separate, deliberate follow-up — several of these repos are live production
 systems (real Discord users, real trades), so swapping their internals for a
 shared dependency happens one repo at a time, on request, not in bulk.
@@ -40,6 +40,25 @@ I/O: American/decimal/prob conversion, de-vig, CLV, a format-agnostic
 (Kalshi/Polymarket network calls) were deliberately left out — those stay in
 the app that needs them.
 
+### `djtoolkit/kalshi.py`
+Kalshi trade-API transport, consolidated from live-trader's `kalshi.py` (the
+original), SharpLab's `shared/kalshi.py` + `shared/kalshi_account.py`,
+finance's `app/kalshi.py`, and vigil's `live/pnl.py`. Only the shared part:
+- `load_key(pem)` / `load_key_file(path)` — PEM parse, with SharpLab's repair
+  for pastes that lost their newlines.
+- `sign_headers(key_id, key, method, path, ts_ms=None)` — RSA-PSS over
+  `ts + METHOD + path` (path incl. `/trade-api/v2`, query stripped).
+- `KalshiClient` (sync) / `AsyncKalshiClient` — signed `request`/`get`,
+  cursor `paginate(path, field)`, `balance()`. 401/403 raise
+  `KalshiAuthError` (an `httpx.HTTPStatusError` subclass).
+- `balance_dollars` / `portfolio_value_dollars` / `account_value_cents` —
+  handle both the cents-int and `*_dollars` response shapes.
+
+App logic stays in the apps: SharpLab's PnL/slates/boards, live-trader's
+order placement + orderbook parsing.
+
+Install: `pip install "djtoolkit[kalshi] @ git+https://github.com/xpoes123/toolkit.git@v0.2.0"`
+
 ### `djtoolkit/avatar.py` + `web/avatar.ts`
 The mechanism behind nsba-cardai's `CuteAvatar.tsx` — deterministic,
 zero-cost per-identity art. `hash32(name)` (FNV-1a) seeds an xorshift32 PRNG;
@@ -66,6 +85,20 @@ git-pull-deploy.sh /opt/finance finance-app
 Shared CSS custom properties, extracted from `finance/index.html` and
 `david-share/app/static/share.css` — both had the exact same hex values
 copy-pasted under different variable names.
+
+## Consuming it
+
+The repo is public, so consumers pin a tag over HTTPS in their deps (no deploy
+key needed on the VPS):
+
+```
+djtoolkit[kalshi] @ git+https://github.com/xpoes123/toolkit.git@v0.2.0
+```
+
+Bump the tag (and `version` in `pyproject.toml`) for each release; on deploy,
+`pip install -r requirements.txt` / `pip install -e .` picks up the new pin.
+
+Tests: `pytest tests/`.
 
 ## Claude Code skills
 

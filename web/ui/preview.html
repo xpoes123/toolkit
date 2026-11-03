@@ -1,15 +1,53 @@
 <!doctype html>
-<meta charset="utf-8"><title>ui preview</title>
-<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="primitives.css"><link rel="stylesheet" href="themes/tokyo-night.css"><link rel="stylesheet" href="themes/ink.css"><link rel="stylesheet" href="themes/paper.css"><link rel="stylesheet" href="themes/davidj.css"><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&family=Newsreader&display=swap" rel="stylesheet"><link rel="stylesheet" href="components.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ui preview</title>
+<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="primitives.css"><link rel="stylesheet" href="themes/tokyo-night.css"><link rel="stylesheet" href="themes/ink.css"><link rel="stylesheet" href="themes/paper.css"><link rel="stylesheet" href="themes/davidj.css"><link rel="stylesheet" href="components.css">
+<script src="ui.js"></script>
 <style>
  body{margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
  .pane{padding:24px;display:grid;gap:16px;align-content:start;background:var(--bg);color:var(--text);font:14px/1.5 var(--font-sans)}
  h2{margin:0;font:600 12px var(--font-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+ .sw{display:grid;grid-template-columns:repeat(8,1fr);gap:4px}.sw span{height:18px;border-radius:var(--radius-sm)}
 </style>
 <body>
 <script>
-for(const t of ["tokyo-night","ink","davidj","paper"])document.body.insertAdjacentHTML("beforeend",`
+const v2 = (t, d) => `
+<section class="pane ui-app ui-controls" data-theme="${t}" ${d ? `data-density="${d}"` : ""}><h2>${t} · v2 ${d || "base"}</h2>
+ <div><div class="ui-eyebrow">Safe to spend today</div>
+  <div class="ui-display">$78<span class="ui-display__unit">/day</span></div>
+  <p class="ui-note">$779 to last until Friday, Nov 13.</p></div>
+ <div class="ui-bar" style="--v:.04;--m:.1"><div class="ui-bar__fill"></div><div class="ui-bar__mark"></div></div>
+ <div class="ui-list">
+  <div class="ui-row ui-row--kv"><span>vs pace</span><span><span class="ui-pos">$120 under</span> <span class="ui-muted">· $229 allowed</span></span></div>
+  <div class="ui-row ui-row--kv"><span>vs your 3-month usual</span><span class="ui-neg">+12%</span></div></div>
+ <div><div class="ui-sechead"><span>New · 3</span><span>$75.87</span></div><div class="ui-list">
+  <a class="ui-row" href="#"><span class="ui-row__main"><span class="ui-row__title">Elzason</span><span class="ui-row__meta">Eating out · Mon</span></span><span class="ui-row__amt">$53.35</span></a>
+  <a class="ui-row" href="#"><span class="ui-row__lead"><span class="ui-row__flag"></span><span class="ui-row__main"><span class="ui-row__title">Disinfecting wipes</span><span class="ui-row__meta">Amazon · needs a category</span></span></span><span class="ui-row__amt">$11.65</span></a>
+ </div></div>
+ <p class="ui-empty">Nothing yet — a no-spend day so far.</p>
+ <div class="row"><div class="ui-seg"><button aria-pressed="true">Month</button><button>Week</button><button>Year</button></div>
+  <button class="ui-btn ui-btn--lg ui-btn--primary">Save</button><button class="ui-btn ui-btn--lg ui-btn--quiet">Cancel</button></div>
+ <div class="row"><input placeholder="Search merchants"><select><option>Shopping</option></select>
+  <label class="ui-check"><input type="checkbox" checked> Always for this merchant</label></div>
+ <div class="ui-stackbar"><span style="--v:5;--c:var(--cat-1)"></span><span style="--v:3;--c:var(--cat-2)"></span><span style="--v:2;--c:var(--cat-3)"></span><span style="--v:1;--c:var(--cat-4)"></span></div>
+ <div class="sw">${[1,2,3,4,5,6,7,8].map(i => `<span style="background:var(--cat-${i})"></span>`).join("")}</div>
+ <div style="--h:36px">${ui.spark([3,4,4,6,5,8,7,9,11,10,12], {label: "net worth"})}</div>
+ <div class="ui-heat">${"MTWTFSS".split("").map(d => `<div class="ui-heat__h">${d}</div>`).join("")}${Array.from({length: 30}, (_, i) => `<div class="ui-heat__cell" data-l="${(i * 7) % 5}">${i + 1}</div>`).join("")}</div>
+ <div class="ui-ticker"><span>SAFE <b>78/d</b></span><span>LEFT <b>2,181</b></span><span>NW <b>70,490</b> <span class="ui-pos">▲10,707</span></span></div>
+ <div class="ui-panels"><div><div class="ui-panel__k">Safe today</div><div class="ui-panel__v">$78</div><div class="ui-panel__s">779 → FRI 13</div></div>
+  <div><div class="ui-panel__k">vs pace</div><div class="ui-panel__v ui-pos">−125</div><div class="ui-panel__s">OCT −412</div></div></div>
+ <div class="ui-scroll"><table class="ui-dtable"><thead><tr><th>Date</th><th>Merchant</th><th>Cat</th><th class="r">Amt</th></tr></thead>
+  <tbody><tr><td>11/02</td><td>Elzason</td><td class="ui-depth" style="--v:.6;--c:var(--cat-2)">Eating out</td><td class="r">53.35</td></tr>
+  <tr aria-selected="true"><td>11/01</td><td>Wipes · Amazon</td><td>??</td><td class="r">11.65</td></tr></tbody></table></div>
+ <div class="ui-alert"><span class="ui-alert__tag">SUB</span>Odds API 30 → 59</div>
+ <div class="ui-hero"><span>Safe to spend today</span><span class="ui-hero__v">$78</span><span>$779 left until payday Friday</span></div>
+ <div class="ui-grid" style="--min:120px"><div class="ui-tile"><div class="ui-tile__v" style="color:var(--pink)">1</div><div class="ui-tile__s">no-spend day in a row</div></div>
+  <div class="ui-tile"><div class="ui-tile__v ui-pos">−38%</div><div class="ui-tile__s">vs your usual</div></div></div>
+ <div class="ui-deck" data-more="1"><div class="ui-deck__card"><div class="ui-meta">1 of 3 · Sun Nov 1</div><b>Disinfecting wipes · $11.65</b>
+  <div class="row"><button class="ui-btn ui-btn--lg">Change</button><button class="ui-btn ui-btn--lg ui-btn--solid">Shopping ✓</button></div></div></div>
+ <p class="ui-callout"><b>Heads up:</b> Wednesdays are your priciest day.</p>
+</section>`;
+for (const t of ["tokyo-night", "ink", "davidj", "paper"]) document.body.insertAdjacentHTML("beforeend", `
 <section class="pane" data-theme="${t}"><h2>${t}</h2>
  <div class="ui-topbar"><b>share</b><span class="ui-muted">feed</span><span class="ui-muted">admin</span></div>
  <div class="ui-tabs"><button class="ui-tab" aria-selected="true">Overview</button><button class="ui-tab">Bets</button></div>
@@ -18,5 +56,6 @@ for(const t of ["tokyo-night","ink","davidj","paper"])document.body.insertAdjace
  <div class="row"><div class="ui-stat"><div class="ui-stat__label">Weekly</div><div class="ui-stat__value">42%</div></div><div class="ui-stat"><div class="ui-stat__label">CLV</div><div class="ui-stat__value">+1.8</div></div></div>
  <div class="ui-card"><b>Card title</b><p class="ui-muted" style="margin:4px 0 12px">Body copy sits here at text-md.</p><input class="ui-input" placeholder="search"></div>
  <table class="ui-table"><tr><th>Market</th><th>Edge</th></tr><tr><td>BOS -3.5</td><td class="ui-mono">+2.1%</td></tr><tr><td>NYK ML</td><td class="ui-mono">-0.4%</td></tr></table>
-</section>`)
+</section>`);
+for (const [t, d] of [["davidj", ""], ["davidj", "terminal"], ["davidj", "simple"], ["paper", ""]]) document.body.insertAdjacentHTML("beforeend", v2(t, d));
 </script>

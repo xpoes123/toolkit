@@ -1,21 +1,16 @@
 <!doctype html>
 <meta charset="utf-8"><title>ui preview</title>
-<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="primitives.css"><link rel="stylesheet" href="themes/tokyo-night.css"><link rel="stylesheet" href="themes/ink.css"><link rel="stylesheet" href="themes/paper.css"><link rel="stylesheet" href="components.css">
 <style>
  body{margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
  .pane{padding:24px;display:grid;gap:16px;align-content:start;background:var(--bg);color:var(--text);font:14px/1.5 var(--font-sans)}
  h2{margin:0;font:600 12px var(--font-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 </style>
-<script>
-const themes=["tokyo-night","ink","paper"];
-for(const t of themes){const s=document.createElement("style");
- fetch(`themes/${t}.css`).then(r=>r.text()).then(c=>{s.textContent=c.replace(":root",`.pane[data-t="${t}"]`);document.head.append(s)})}
-</script>
 <body>
 <script>
-for(const t of themes)document.body.insertAdjacentHTML("beforeend",`
-<section class="pane" data-t="${t}"><h2>${t}</h2>
+for(const t of ["tokyo-night","ink","paper"])document.body.insertAdjacentHTML("beforeend",`
+<section class="pane" data-theme="${t}"><h2>${t}</h2>
  <div class="ui-topbar"><b>share</b><span class="ui-muted">feed</span><span class="ui-muted">admin</span></div>
  <div class="ui-tabs"><button class="ui-tab" aria-selected="true">Overview</button><button class="ui-tab">Bets</button></div>
  <div class="row"><button class="ui-btn ui-btn--primary">Deploy</button><button class="ui-btn">Cancel</button><button class="ui-btn ui-btn--danger">Delete</button><span class="ui-spinner"></span></div>

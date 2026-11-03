@@ -1,5 +1,5 @@
 /* Calm neutral dark: near-black ink, one restrained accent, low saturation status colors. */
-:root {
+[data-theme="ink"] {
   --bg: #111214;
   --surface: #191b1e;
   --surface-2: #151618;

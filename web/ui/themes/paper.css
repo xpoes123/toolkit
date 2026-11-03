@@ -1,5 +1,5 @@
 /* Warm light: paper background, ink text, one deep accent. */
-:root {
+[data-theme="paper"] {
   --bg: #f5f2ea;
   --surface: #fbf9f3;
   --surface-2: #efebe0;

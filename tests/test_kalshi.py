@@ -30,6 +30,22 @@ def test_sign_headers_verify_and_strip_query():
     _verify(h, b"123POST/trade-api/v2/portfolio/orders")
 
 
+def test_ed25519_key_loads_flattened_and_signs():
+    from cryptography.hazmat.primitives import serialization
+    from cryptography.hazmat.primitives.asymmetric import ec, ed25519
+    key = ed25519.Ed25519PrivateKey.generate()
+    pem = key.private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8,
+                            serialization.NoEncryption()).decode()
+    loaded = k.load_key(" ".join(pem.split("\n")))
+    h = k.sign_headers("kid", loaded, "get", "/trade-api/v2/portfolio/balance?x=1", ts_ms=123)
+    key.public_key().verify(base64.b64decode(h["KALSHI-ACCESS-SIGNATURE"]),
+                            b"123GET/trade-api/v2/portfolio/balance")
+    other = ec.generate_private_key(ec.SECP256R1()).private_bytes(
+        serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8, serialization.NoEncryption())
+    with pytest.raises(ValueError):
+        k.load_key(other)
+
+
 def test_load_key_flattened_pem_and_bytes(tmp_path):
     flat = " ".join(_pem().split("\n"))  # Discord paste that lost its newlines
     assert k.load_key(flat).private_numbers() == KEY.private_numbers()

@@ -7,8 +7,8 @@ Only the transport is here: key loading, request signing, sync + async clients
 with GET/cursor pagination, and balance parsing. App logic (PnL math, order
 placement, orderbook parsing, market boards) stays in the app.
 
-Signing per Kalshi's spec: RSA-PSS(SHA256, salt=digest length) over
-`ts_ms + METHOD + path`, where path is everything after the host INCLUDING
+Signing per Kalshi's spec: RSA-PSS(SHA256, salt=digest length), or Ed25519 for
+those keys, over `ts_ms + METHOD + path`, where path is everything after the host INCLUDING
 `/trade-api/v2` and WITHOUT the query string.
 
 Deps: `cryptography` + `httpx` (`pip install "djtoolkit[kalshi] @ git+..."`).
@@ -22,9 +22,10 @@ from urllib.parse import urlsplit
 
 import httpx
 from cryptography.hazmat.primitives import hashes, serialization
-from cryptography.hazmat.primitives.asymmetric import padding, rsa
+from cryptography.hazmat.primitives.asymmetric import ed25519, padding, rsa
 
 KALSHI_BASE = "https://api.elections.kalshi.com/trade-api/v2"
+PrivateKey = rsa.RSAPrivateKey | ed25519.Ed25519PrivateKey
 
 
 class KalshiAuthError(httpx.HTTPStatusError):
@@ -38,7 +39,7 @@ class KalshiAuthError(httpx.HTTPStatusError):
 
 # ---- keys + signing ---------------------------------------------------------
 
-def load_key(pem: str | bytes) -> rsa.RSAPrivateKey:
+def load_key(pem: str | bytes) -> PrivateKey:
     """Parse a PEM private key. A paste that lost its newlines (Discord flattens
     them to spaces) is rebuilt into a valid PEM first."""
     if isinstance(pem, bytes):
@@ -51,12 +52,12 @@ def load_key(pem: str | bytes) -> rsa.RSAPrivateKey:
             begin, body, end = parts[1], parts[2], parts[3]
             pem = f"-----{begin}-----\n" + "\n".join(body.split()) + f"\n-----{end}-----\n"
     key = serialization.load_pem_private_key(pem.encode(), password=None)
-    if not isinstance(key, rsa.RSAPrivateKey):
-        raise ValueError("not an RSA private key")
+    if not isinstance(key, (rsa.RSAPrivateKey, ed25519.Ed25519PrivateKey)):
+        raise ValueError("not an RSA or Ed25519 private key")
     return key
 
 
-def load_key_file(path: str | os.PathLike) -> rsa.RSAPrivateKey:
+def load_key_file(path: str | os.PathLike) -> PrivateKey:
     with open(path, "rb") as f:
         return load_key(f.read())
 
@@ -66,14 +67,17 @@ def sign_path(base: str, path: str) -> str:
     return urlsplit(base).path.rstrip("/") + path.split("?", 1)[0]
 
 
-def sign_headers(key_id: str, key: rsa.RSAPrivateKey, method: str, path: str,
+def sign_headers(key_id: str, key: PrivateKey, method: str, path: str,
                  ts_ms: int | None = None) -> dict[str, str]:
     """Auth headers for one request. `path` is the full URL path (incl. /trade-api/v2);
     any query string is stripped before signing."""
     ts = str(ts_ms if ts_ms is not None else int(time.time() * 1000))
     msg = f"{ts}{method.upper()}{path.split('?', 1)[0]}".encode()
-    sig = key.sign(msg, padding.PSS(mgf=padding.MGF1(hashes.SHA256()),
-                                    salt_length=padding.PSS.DIGEST_LENGTH), hashes.SHA256())
+    if isinstance(key, ed25519.Ed25519PrivateKey):
+        sig = key.sign(msg)
+    else:
+        sig = key.sign(msg, padding.PSS(mgf=padding.MGF1(hashes.SHA256()),
+                                        salt_length=padding.PSS.DIGEST_LENGTH), hashes.SHA256())
     return {"KALSHI-ACCESS-KEY": key_id, "KALSHI-ACCESS-TIMESTAMP": ts,
             "KALSHI-ACCESS-SIGNATURE": base64.b64encode(sig).decode()}
 
@@ -130,7 +134,7 @@ def _check(r: httpx.Response) -> None:
 
 
 class _Base:
-    def __init__(self, key_id: str, key: rsa.RSAPrivateKey, base: str = KALSHI_BASE) -> None:
+    def __init__(self, key_id: str, key: PrivateKey, base: str = KALSHI_BASE) -> None:
         self.key_id = key_id
         self.key = key
         self.base = base.rstrip("/")
@@ -144,7 +148,7 @@ class _Base:
 class KalshiClient(_Base):
     """Sync client. `request`/`get` return parsed JSON; paths are relative to base."""
 
-    def __init__(self, key_id: str, key: rsa.RSAPrivateKey, base: str = KALSHI_BASE, *,
+    def __init__(self, key_id: str, key: PrivateKey, base: str = KALSHI_BASE, *,
                  timeout: float = 10.0, http: httpx.Client | None = None) -> None:
         super().__init__(key_id, key, base)
         self.http = http or httpx.Client(timeout=timeout)
@@ -182,7 +186,7 @@ class KalshiClient(_Base):
 class AsyncKalshiClient(_Base):
     """Async twin of KalshiClient. Pass `http` to share one httpx.AsyncClient."""
 
-    def __init__(self, key_id: str, key: rsa.RSAPrivateKey, base: str = KALSHI_BASE, *,
+    def __init__(self, key_id: str, key: PrivateKey, base: str = KALSHI_BASE, *,
                  timeout: float = 10.0, http: httpx.AsyncClient | None = None) -> None:
         super().__init__(key_id, key, base)
         self.http = http or httpx.AsyncClient(timeout=timeout)

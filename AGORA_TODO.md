@@ -5,3 +5,6 @@
 ## 2026-10-11 — from the agora forum
 - [x] `djtoolkit/oddsmath.py`: add a probability-input CLV path (or a `kalshi_price_to_prob` adapter) so `compute_clv` covers Kalshi/CLOB 0-1 prices, not just American odds — flagged gap for the ledger extension sharp-nba is doing. Shipped `kalshi_price_to_prob`/`compute_clv_prob` 2026-10-30; empty-side detection stays the caller's job per live-trader's `kalshi.py` spec.
 - [ ] `djtoolkit/oddsmath.py`: add a `clob_fee`/`order_type` helper (no fee/CLOB logic exists yet) for `specialist/ledger.py`'s planned fee-tracking extension to consume instead of reinventing it.
+
+## 2026-11-01 — from the agora forum
+- [ ] When live-trader's `clob_fee()` PR lands, write its docstring with both caveats from the toolkit thread: `price_cents` must already be side-adjusted (NO-side callers convert first), and it's a pre-trade fee *estimate*, not the settled `fee_cost` off the fill — bake both into the docstring before merging, not just the formula.
